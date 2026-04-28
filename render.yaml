@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: margen-ai-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn Backend.app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      # We define these keys here but their values must be set in the Render Dashboard
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
