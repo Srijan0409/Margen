@@ -110,8 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- BACKEND CONNECTION ---
-    // Replace with your actual URL
-    const BASE_URL = 'https://margen-1-f633.onrender.com';
+    // Automatically switch between Local and Production APIs
+    const BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://127.0.0.1:5001' 
+        : 'https://margen-1-f633.onrender.com';
     async function handleApiRequest(endpoint, method = 'POST', body = null) {
         const url = `${BASE_URL}${endpoint}`;
         const options = {
@@ -391,10 +393,13 @@ document.addEventListener('DOMContentLoaded', () => {
         roadmapContent.innerHTML = '';
         loaders.roadmap.classList.remove('hidden');
         try {
+            console.log("Fetching roadmap for:", careerTitle);
             const result = await handleApiRequest('/generate-roadmap', 'POST', { careerTitle });
             currentRoadmapForAnalysis = result;
             setTimeout(() => displayRoadmap(result), 0);
         } catch (e) {
+            alert("Roadmap failed to load. Check backend.");
+            console.error(e);
         } finally {
             loaders.roadmap.classList.add('hidden');
         }
@@ -402,43 +407,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function displayRoadmap(roadmap) {
         roadmapContent.innerHTML = '';
-        const cardBg = document.body.classList.contains('dark') ? '#FFFFFF0D' : '#FFFFFFB3';
-        const inputBg = document.body.classList.contains('dark') ? '#00000033' : '#E5E7EBCC';
-        const textPrimary = document.body.classList.contains('dark') ? '#FFFFFF' : '#111827';
-        const textAccent = document.body.classList.contains('dark') ? '#22d3ee' : '#4f46e5';
+        
+        // Root title from the currently selected career
+        const rootTitle = currentCareerForAnalysis || "Career Roadmap";
+        
+        // Mermaid mindmap syntax with IDs and explicit shapes is 100% safe
+        let mermaidSyntax = `mindmap\n`;
+        
+        // Format root node (circle shape)
+        const safeRootTitle = rootTitle.replace(/"/g, '#quot;');
+        mermaidSyntax += `  root(("${safeRootTitle}"))\n`;
 
-        let mermaidSyntax = 'graph TD;\n\n';
-        mermaidSyntax += `    classDef milestoneNode fill:${cardBg},stroke:${textAccent},stroke-width:1.5,color:${textPrimary},font-weight:bold,padding:15px,border-radius:10px;\n`;
-        mermaidSyntax += `    classDef skillNode fill:${inputBg},stroke:${textAccent},stroke-width:1,color:${textPrimary},padding:10px,border-radius:8px;\n`;
-        mermaidSyntax += `    linkStyle default stroke:${textAccent},stroke-width:1.5,stroke-dasharray:3 3;\n\n`;
+        roadmap.forEach((milestone, mIndex) => {
+            // Format milestone nodes
+            const safeMilestoneTitle = milestone.title.replace(/"/g, '#quot;');
+            mermaidSyntax += `    M${mIndex}("${safeMilestoneTitle}")\n`;
 
-        let mainLinkCounter = 0;
-
-        roadmap.forEach((milestone, index) => {
-            const milestoneId = `M${index}`;
-            const milestoneTitle = milestone.title.replace(/"/g, '#quot;');
-            mermaidSyntax += `    ${milestoneId}("${milestoneTitle}");\n`;
-            mermaidSyntax += `    class ${milestoneId} milestoneNode;\n`;
-
-            if (index > 0) {
-                mermaidSyntax += `    M${index - 1} --> ${milestoneId};\n`;
-                mermaidSyntax += `    linkStyle ${mainLinkCounter} stroke:${textAccent},stroke-width:2,stroke-dasharray:none;\n`;
-                mainLinkCounter++;
-            }
-
-            milestone.skills.forEach((skill, skillIndex) => {
-                const skillId = `S_${index}_${skillIndex}`;
-                const skillName = skill.name.replace(/"/g, '#quot;');
-                mermaidSyntax += `    ${skillId}("<a href='${skill.resource.link}' target='_blank' style='color:${textPrimary}'>${skillName}</a>");\n`;
-                mermaidSyntax += `    class ${skillId} skillNode;\n`;
-                mermaidSyntax += `    ${milestoneId} -.-> ${skillId};\n`;
+            milestone.skills.forEach((skill, sIndex) => {
+                // Format skill nodes
+                const safeSkillName = skill.name.replace(/"/g, '#quot;');
+                mermaidSyntax += `      S_${mIndex}_${sIndex}("${safeSkillName}")\n`;
             });
-            mermaidSyntax += '\n';
         });
 
         roadmapContent.textContent = mermaidSyntax;
         roadmapContent.removeAttribute('data-processed');
-        await window.mermaid.run({ nodes: [roadmapContent] });
+        
+        try {
+            await window.mermaid.run({ nodes: [roadmapContent] });
+        } catch (e) {
+            console.error("Mermaid mindmap rendering failed:", e);
+            roadmapContent.innerHTML = "<p style='color: #ef4444; text-align: center; margin-top: 2rem;'>Failed to render branching roadmap. Please try again.</p>";
+        }
     }
 
     async function fetchAndDisplayComparison() {
