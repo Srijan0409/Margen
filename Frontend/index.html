@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARGEN AI - Career Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: false });
+        window.mermaid = mermaid; // Make it globally accessible
+    </script>
+    
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="gradient-background">
+    <div id="app-container">
+        <div id="theme-toggle-container" class="fixed top-6 right-6 z-50">
+             <button id="theme-toggle-btn" class="theme-toggle-btn !static">
+                 <svg id="theme-icon-sun" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                 <svg id="theme-icon-moon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+        </div>
+
+        <header id="app-header" class="hidden">
+            <div id="app-header-left">
+                <h1 class="text-2xl font-bold tracking-wider" style="color: var(--text-primary);">MARGEN AI</h1>
+                 <button id="back-to-choice-btn" class="ml-6 font-semibold hover:opacity-80 transition hidden items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                     Change Mode
+                </button>
+            </div>
+            <div id="app-header-right">
+                <div class="flex items-center" style="color: var(--text-primary);">
+                    <span id="user-email" class="mr-4 opacity-80"></span>
+                    <button id="signout-btn" class="font-semibold hover:opacity-80 transition">Sign Out</button>
+                </div>
+            </div>
+        </header>
+
+        <main id="landing-page" class="page active">
+            <div class="landing-content">
+                <p>Welcome to</p>
+                <h1 class="landing-title">MARGEN AI</h1>
+                <p class="landing-subtitle">Your personalized guide to professional growth. Navigate your career path with confidence.</p>
+                <button id="get-started-btn" class="get-started-btn mx-auto mt-10">Get Started</button>
+                <div class="compact-features">
+                    <div class="compact-feature-item">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        <span>Personalized Paths</span>
+                    </div>
+                    <div class="compact-feature-item">
+                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.25 2.75 2.75S13.5 26.44 12 26.44 9.25 25.19 9.25 23.69s1.25-2.75 2.75-2.75z"/><path d="M12 20.94V4.19"/><path d="M12 4.19c-1.5 0-2.75-1.25-2.75-2.75S10.5-1.31 12-1.31s2.75 1.25 2.75 2.75S13.5 4.19 12 4.19z"/></svg>
+                        <span>Dynamic Roadmaps</span>
+                    </div>
+                    <div class="compact-feature-item">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>AI Powered</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+       <main id="auth-page" class="page">
+             <div class="auth-container">
+                <div class="auth-promo-panel">
+                    <h2 id="auth-promo-title">Unlock Your Future.</h2>
+                    <p id="auth-promo-text">Gain clarity and direction for your professional journey. Your personalized career roadmap is just a few clicks away.</p>
+                </div>
+                <div class="auth-form-panel">
+                    <h2 class="form-title" style="color: var(--text-primary);">MARGEN AI</h2>
+                    <p class="form-subtitle" style="color: var(--text-secondary) !important;">Your future awaits. Sign in to continue.</p>
+                    <div class="tab-container">
+                        <button id="signin-tab" class="tab active">Email</button>
+                        <button id="signup-tab" class="tab">Sign Up</button>
+                        <button id="otp-tab" class="tab">Use OTP</button>
+                    </div>
+                    <form id="signin-form">
+                        <div class="space-y-5">
+                            <input id="signin-email" type="email" placeholder="Email Address" class="input-field" required>
+                            <input id="signin-password" type="password" placeholder="Password" class="input-field" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Sign In &rarr;</button>
+                    </form>
+                    <form id="signup-form" class="hidden">
+                        <div class="space-y-5">
+                            <input id="signup-email" type="email" placeholder="Email Address" class="input-field" required>
+                            <input id="signup-password" type="password" placeholder="Create a Password" class="input-field" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Create Account &rarr;</button>
+                    </form>
+                    <form id="otp-form" class="hidden">
+                        <div id="otp-phone-step">
+                            <label class="block mb-2" for="phone-number" style="color: var(--text-primary);">Enter your phone number to receive a one-time password.</label>
+                            <input id="phone-number" type="tel" placeholder="+91..." class="input-field" required>
+                            <button id="send-otp-btn" type="button" class="submit-btn">Send OTP</button>
+                        </div>
+                        <div id="otp-verify-step" class="hidden">
+                            <label class="block mb-2" for="otp-code" style="color: var(--text-primary);">Enter the 6-digit code sent to <span id="otp-phone-display" class="font-bold"></span>.</label>
+                            <input id="otp-code" type="text" placeholder="123456" class="input-field" required>
+                            <button type="submit" class="submit-btn">Verify & Sign In</button>
+                        </div>
+                    </form>
+                    <p id="auth-error" class="text-pink-300 text-sm text-center mt-4"></p>
+                </div>
+            </div>
+        </main>
+
+        <main id="choice-page" class="page">
+            <div class="text-center">
+                <h2 class="form-title">Define Your Objective</h2>
+                <p class="form-subtitle">Let's start by choosing your primary goal for today.</p>
+                <div class="flex flex-col md:flex-row gap-8 mt-8">
+                    <div id="choice-career-advice" class="choice-card">
+                        <div class="choice-card-icon">🧭</div>
+                        <h3>Career Exploration</h3>
+                        <p>Discover personalized career roadmaps and find your ideal professional path.</p>
+                    </div>
+                    <div id="choice-job-prep" class="choice-card">
+                        <div class="choice-card-icon">🎯</div>
+                        <h3>Targeted Job Prep</h3>
+                        <p>Focus your preparation for a specific role with practice, quizzes, and resources.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <main id="job-target-page" class="page">
+            <div class="input-card">
+                <h2 class="form-title">Focus Your Preparation</h2>
+                <p class="form-subtitle">Tell us about the job you're targeting. This helps us tailor your experience.</p>
+                <form id="job-target-form" class="mt-8 space-y-6">
+                    <div>
+                        <label for="target-role" class="form-label">Target Role / Job Title</label>
+                        <input id="target-role" type="text" placeholder="e.g., Senior Frontend Developer" class="input-field-light" required>
+                    </div>
+                    <div>
+                        <label for="target-companies" class="form-label">Dream Companies (Optional)</label>
+                        <input id="target-companies" type="text" placeholder="e.g., Google, Amazon, Microsoft" class="input-field-light">
+                    </div>
+                     <div>
+                        <label for="experience-level" class="form-label">Your Experience Level</label>
+                        <select id="experience-level" class="input-field-light">
+                            <option value="Internship">Internship</option>
+                            <option value="Entry-level" selected>Entry-level / New Grad (0-2 years)</option>
+                            <option value="Mid-level">Mid-level (2-5 years)</option>
+                            <option value="Senior">Senior (5+ years)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="skills-to-practice" class="form-label">Key Skills to Practice</label>
+                        <textarea id="skills-to-practice" rows="3" placeholder="e.g., Data Structures, System Design, Behavioral Questions" class="input-field-light"></textarea>
+                    </div>
+                    <div class="flex justify-between items-center pt-2">
+                         <button type="button" id="back-to-choice-from-target-btn" class="wizard-btn secondary">Go Back</button>
+                         <button type="submit" class="wizard-btn primary">Start Preparation &rarr;</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <div id="job-prep-container">
+            <aside id="job-prep-sidebar">
+                <div class="flex flex-col space-y-2">
+                    <a href="#" class="sidebar-link active" data-target="dashboard">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="practice">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        <span>Practice</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="quizzes">
+                         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        <span>Quizzes</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="resources">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        <span>Resources</span>
+                    </a>
+                    <a href="#" class="sidebar-link" data-target="discuss">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span>Discuss</span>
+                    </a>
+                </div>
+            </aside>
+            <main id="job-prep-content">
+                <div id="job-prep-dashboard-page" class="job-prep-page active">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Dashboard</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="course-card">
+                            <h3 class="font-bold text-lg mb-2">Problems Solved</h3>
+                            <p class="text-4xl font-extrabold" style="color: var(--text-accent);">0</p>
+                        </div>
+                         <div class="course-card">
+                            <h3 class="font-bold text-lg mb-2">Quizzes Attempted</h3>
+                            <p class="text-4xl font-extrabold" style="color: var(--text-accent);">0</p>
+                        </div>
+                         <div class="course-card">
+                            <h3 class="font-bold text-lg mb-2">Overall Progress</h3>
+                            <div class="progress-bar-container mt-4">
+                                <div class="progress-bar-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold mt-10 mb-4" style="color: var(--text-primary);">Your Bookmarks</h3>
+                    <p style="color: var(--text-secondary);">You haven't bookmarked any questions yet.</p>
+                </div>
+                <div id="job-prep-practice-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Practice Problems</h2>
+                    <p style="color: var(--text-secondary);">A list of practice problems with filters for company, topic, and difficulty will be shown here.</p>
+                </div>
+                <div id="job-prep-quizzes-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Quizzes and Mock Tests</h2>
+                    <p style="color: var(--text-secondary);">A list of available quizzes will be shown here.</p>
+                </div>
+                <div id="job-prep-resources-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Resources</h2>
+                    <p style="color: var(--text-secondary);">Curated notes, PDFs, and helpful links will be available here.</p>
+                </div>
+                 <div id="job-prep-discuss-page" class="job-prep-page">
+                    <h2 class="text-3xl font-bold mb-6" style="color: var(--text-primary);">Discussion Forum</h2>
+                    <p style="color: var(--text-secondary);">A community Q&A section will be available here.</p>
+                </div>
+            </main>
+        </div>
+
+
+        <main id="input-page" class="page">
+            <div class="input-card">
+                <h2 class="form-title">Tell Us About You</h2>
+                <p class="form-subtitle">This helps us find the perfect career path for you.</p>
+                <form id="input-form" class="mt-8 space-y-6">
+                    <div>
+                        <label for="name" class="form-label">What's your name?</label>
+                        <input id="name" type="text" placeholder="Enter your name" class="input-field-light">
+                    </div>
+                    <div>
+                        <label for="interests" class="form-label">Your Interests</label>
+                        <input id="interests" type="text" placeholder="e.g., Technology, Art, Healthcare" class="input-field-light">
+                        <button type="button" id="start-assessment-btn" class="text-sm mt-2" style="color: var(--text-accent);">Don't know? Tap to take an interest assessment.</button>
+                    </div>
+                    <div>
+                        <label for="skills" class="form-label">Your Current Skills</label>
+                        <input id="skills" type="text" placeholder="e.g., Python, Communication, Teamwork" class="input-field-light">
+                    </div>
+                     <div>
+                        <label for="pace" class="form-label">Preferred Pace</label>
+                        <select id="pace" class="input-field-light">
+                            <option value="Fast-track">Fast-track</option>
+                            <option value="Balanced" selected>Balanced</option>
+                            <option value="Slow">Slow & Steady</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Life Goals (Select all that apply)</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Income"><span>Income</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Flexibility"><span>Flexibility</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Creativity"><span>Creativity</span></label>
+                            <label class="goal-checkbox"><input type="checkbox" name="life-goal" value="Stability"><span>Stability</span></label>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Get My Career Path ✨</button>
+                </form>
+            </div>
+        </main>
+        <main id="assessment-page" class="page">
+            <div class="input-card">
+                <h2 class="form-title">Interest Assessment</h2>
+                <p class="form-subtitle">Answer these questions to discover your interests.</p>
+                <form id="assessment-form" class="mt-8 space-y-6">
+                    <div class="assessment-question">
+                        <p class="form-label">1. On a free weekend, you would most likely be found:</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q1" value="building something"> Building something with your hands or on a computer.</label>
+                            <label class="assessment-option"><input type="radio" name="q1" value="exploring a museum or creating art"> Exploring a museum or creating art.</label>
+                            <label class="assessment-option"><input type="radio" name="q1" value="helping friends with their problems"> Helping friends with their problems or volunteering.</label>
+                            <label class="assessment-option"><input type="radio" name="q1" value="analyzing data or solving complex puzzles"> Analyzing data or solving complex puzzles.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">2. Which of these topics fascinates you the most?</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q2" value="The future of technology and AI"> The future of technology and AI.</label>
+                            <label class="assessment-option"><input type="radio" name="q2" value="Human psychology and storytelling"> Human psychology and storytelling.</label>
+                            <label class="assessment-option"><input type="radio" name="q2" value="Business strategies and market trends"> Business strategies and market trends.</label>
+                            <label class="assessment-option"><input type="radio" name="q2" value="Environmental science and sustainability"> Environmental science and sustainability.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">3. You enjoy tasks that involve:</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q3" value="Logical thinking and clear steps"> Logical thinking and clear, defined steps.</label>
+                            <label class="assessment-option"><input type="radio" name="q3" value="Creative expression and originality"> Creative expression and thinking outside the box.</label>
+                            <label class="assessment-option"><input type="radio" name="q3" value="Collaboration and leading a team"> Collaboration, communication, and leading a team.</label>
+                            <label class="assessment-option"><input type="radio" name="q3" value="Research, investigation, and finding answers"> Research, investigation, and finding answers.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">4. If you were to start a new project, what would it be?</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q4" value="Developing a new app or website"> Developing a new app or website.</label>
+                            <label class="assessment-option"><input type="radio" name="q4" value="Writing a novel or directing a short film"> Writing a novel or directing a short film.</label>
+                            <label class="assessment-option"><input type="radio" name="q4" value="Starting a small business or an online store"> Starting a small business or an online store.</label>
+                            <label class="assessment-option"><input type="radio" name="q4" value="Organizing a community clean-up event"> Organizing a community clean-up event or a fundraiser.</label>
+                        </div>
+                    </div>
+                    <div class="assessment-question">
+                        <p class="form-label">5. You are most comfortable working with:</p>
+                        <div class="space-y-2">
+                            <label class="assessment-option"><input type="radio" name="q5" value="Data and numbers"> Data, numbers, and logical systems.</label>
+                            <label class="assessment-option"><input type="radio" name="q5" value="Ideas and concepts"> Ideas, concepts, and visual designs.</label>
+                            <label class="assessment-option"><input type="radio" name="q5" value="People and teams"> People, teams, and communication.</label>
+                            <label class="assessment-option"><input type="radio" name="q5" value="Hands-on tools and physical objects"> Hands-on tools and physical objects.</label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-8">
+                        <button type="button" id="cancel-assessment-btn" class="wizard-btn secondary">Cancel</button>
+                        <button type="submit" class="wizard-btn primary">Find My Interests</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <main id="careers-page" class="page w-full p-4 md:p-8">
+             <div class="w-full max-w-7xl mx-auto flex-grow flex flex-col">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-extrabold" style="color: var(--text-primary);">Here Are Your Custom Paths</h2>
+                    <p id="careers-subtitle" class="mt-2" style="color: var(--text-secondary);">Click a card to discover your roadmap.</p>
+                </div>
+                <div id="careers-loader" class="loader hidden"></div>
+                <div id="careers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 flex-grow"></div>
+                <div class="text-center mt-8 space-x-4">
+                    <button id="back-to-input-btn" class="back-btn-bottom">Go Back & Edit</button>
+                    <button id="toggle-compare-mode-btn" class="back-btn-bottom">Compare Roadmaps</button>
+                    <button id="view-comparison-btn" class="back-btn-bottom hidden">View Comparison</button>
+                </div>
+            </div>
+        </main>
+        <main id="roadmap-page" class="page w-full p-4 md:p-8">
+             <div class="w-full">
+                <div class="flex justify-between items-center w-full max-w-7xl mx-auto mb-6"> <button id="back-to-careers-btn" class="font-semibold transition flex items-center" style="color: var(--text-accent);">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Careers
+                    </button>
+                    <div class="flex flex-wrap gap-4 roadmap-actions">
+                        <button id="future-scope-btn" class="wizard-btn secondary">
+                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                             Future Scope in India
+                        </button>
+                        <button id="export-pdf-btn" class="wizard-btn secondary">
+                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                            Export as PDF
+                        </button>
+                        <button id="analyze-skills-btn-roadmap" class="wizard-btn secondary">Analyze My Skills</button>
+                        <button id="start-interview-btn-roadmap" class="wizard-btn primary">Start Mock Interview</button>
+                    </div>
+                </div>
+                <h2 id="roadmap-title" class="text-3xl font-extrabold text-center mb-10" style="color: var(--text-primary);"></h2>
+                <div id="roadmap-loader" class="loader hidden"></div>
+                <pre id="roadmap-content" class="mermaid"></pre>
+            </div>
+        </main>
+        <main id="comparison-page" class="page w-full max-w-7xl mx-auto p-4 md:p-8">
+             <div class="w-full">
+                <button id="back-to-careers-from-compare-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Career Options
+                </button>
+                <h2 class="text-4xl font-extrabold text-center mb-8" style="color: var(--text-primary);">Comparison of Career Roadmaps</h2>
+                <div id="comparison-loader" class="loader hidden"></div>
+                <div id="comparison-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </main>
+        <main id="interview-page" class="page w-full p-4 md:p-8">
+            <div class="chat-container">
+                <div class="chat-header">
+                     <button id="back-to-roadmap-from-interview-btn" class="font-semibold transition flex items-center mb-2" style="color: var(--text-accent);">
+                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Roadmap
+                    </button>
+                    <h2 id="interview-title" class="text-xl font-bold text-center" style="color: var(--text-primary);"></h2>
+                </div>
+                <div id="chat-messages" class="chat-messages flex flex-col">
+                </div>
+                <form id="chat-form" class="chat-input-form">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Type your answer..." autocomplete="off">
+                    <button type="submit" class="chat-send-btn">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                    </button>
+                </form>
+            </div>
+        </main>
+        <main id="skill-gap-page" class="page w-full max-w-4xl mx-auto p-4 md:p-8">
+            <div class="input-card w-full">
+                <button id="back-to-roadmap-from-gap-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Roadmap
+                </button>
+                <h2 id="skill-gap-title" class="form-title text-center mb-4"></h2>
+                <p class="form-subtitle text-center">Enter your current skills to see how you measure up.</p>
+                <form id="skill-gap-form" class="mt-8 space-y-6">
+                    <div>
+                        <label for="user-skills-input" class="form-label">Your Skills (comma-separated)</label>
+                        <textarea id="user-skills-input" rows="4" placeholder="e.g., HTML, CSS, JavaScript, React, Node.js" class="input-field-light"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Analyze My Skills</button>
+                </form>
+                <div id="skill-gap-results" class="mt-8 hidden">
+                    <h3 class="text-2xl font-bold mb-4">Your Progress</h3>
+                    <div class="progress-bar-container">
+                        <div id="progress-bar-fill" class="progress-bar-fill flex items-center justify-end pr-2 text-white text-sm" style="width: 0%;">
+                             <span id="progress-bar-text">0%</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">✅ Skills You Have</h4>
+                            <ul id="skills-have-list" class="space-y-2"></ul>
+                        </div>
+                        <div>
+                             <h4 class="font-bold text-lg mb-2">🎯 Skills to Learn</h4>
+                            <ul id="skills-to-learn-list" class="space-y-2"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <main id="future-scope-page" class="page landing-theme-bg w-full max-w-4xl mx-auto p-4 md:p-8">
+            <div class="input-card w-full">
+                <button id="back-to-roadmap-from-scope-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Roadmap
+                </button>
+                <h2 id="future-scope-title" class="form-title text-center mb-4"></h2>
+                <div id="future-scope-loader" class="loader hidden"></div>
+                <div id="future-scope-content" class="prose prose-invert max-w-none text-left" style="color: var(--text-secondary); line-height: 1.75;"></div>
+            </div>
+        </main>
+        <main id="project-pitch-page" class="page w-full max-w-4xl mx-auto p-4 md:p-8">
+            <div class="input-card w-full">
+                <button id="back-to-roadmap-from-pitch-btn" class="font-semibold mb-6 transition flex items-center" style="color: var(--text-accent);">
+                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Roadmap
+                </button>
+                <h2 id="project-pitch-title" class="form-title text-center mb-4"></h2>
+                <div id="project-pitch-loader" class="loader hidden"></div>
+                <p id="project-pitch-content" class="text-center" style="color: var(--text-secondary);"></p>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
