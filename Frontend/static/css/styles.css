@@ -188,8 +188,10 @@
             -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
         .mermaid {
-            min-width: 800px; /* Give the diagram space to breathe, preventing compression */
-            text-align: left;  /* Align the start of the diagram to the left of the scroll container */
+            min-width: 100%; /* Let it expand naturally or fill container */
+            text-align: center;  /* Center the mindmap horizontally */
+            display: flex;
+            justify-content: center;
         }
         .mermaid svg {
             max-width: none; /* KEY FIX: Allows the SVG to render at its natural, full width */
