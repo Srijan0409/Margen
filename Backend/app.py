@@ -39,7 +39,7 @@ if not gemini_api_key:
     sys.exit(1)
 
 genai.configure(api_key=gemini_api_key)
-model = genai.GenerativeModel('gemini-1.5-flash-latest')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 # --- 2. DATABASE MODELS ---
 class User(db.Model):
@@ -57,32 +57,61 @@ class OTP(db.Model):
 with app.app_context():
     db.create_all()
 
-# --- 3. HELPER FUNCTION ---
-def clean_json_response(text):
-    """More robustly cleans the AI's response to extract valid JSON."""
-    match = re.search(r'```json\s*([\s\S]*?)\s*```', text)
-    if match:
-        return match.group(1).strip()
-    
-    # Find the first '[' or '{' and the last ']' or '}'
-    start_bracket_pos = text.find('[')
-    start_brace_pos = text.find('{')
-    
-    if start_bracket_pos == -1 and start_brace_pos == -1: return text
-    
-    start_pos = -1
-    if start_bracket_pos != -1 and start_brace_pos != -1: start_pos = min(start_bracket_pos, start_brace_pos)
-    elif start_bracket_pos != -1: start_pos = start_bracket_pos
-    else: start_pos = start_brace_pos
+# --- 3. GLOBAL ERROR HANDLERS & HEALTH ---
+@app.errorhandler(500)
+def internal_error(e):
+    print(f"Global 500 Error: {e}")
+    return jsonify({"error": "An internal server error occurred"}), 500
 
-    end_char = ']' if text[start_pos] == '[' else '}'
-    end_pos = text.rfind(end_char)
+@app.errorhandler(404)
+def not_found_error(e):
+    return jsonify({"error": "Endpoint not found"}), 404
 
-    if end_pos > start_pos: return text[start_pos:end_pos + 1]
-    
-    return text
+@app.route('/health')
+def health():
+    return jsonify({"status": "ok", "message": "MARGEN AI Backend is running"})
 
-# --- 4. API ROUTES ---
+# --- 4. AI HELPER FUNCTION ---
+import time
+
+def generate_ai_response(prompt, expect_json=True, retries=2):
+    """
+    Universal helper to call Gemini API, handle timeouts, and safely extract JSON.
+    Returns parsed JSON (dict/list) if expect_json=True. Returns raw text if expect_json=False.
+    Returns None if all retries fail.
+    """
+    if not model:
+        print("Error: AI model not configured.")
+        return None
+
+    for attempt in range(retries + 1):
+        try:
+            print(f"--- AI Request Attempt {attempt + 1}/{retries + 1} ---")
+            # Google SDK generally respects standard timeouts; we rely on the SDK's internal handling
+            response = model.generate_content(prompt)
+            print("RAW RESPONSE:", response.text)
+            
+            if not expect_json:
+                return response.text
+                
+            # Safely extract JSON using regex (matching arrays or objects)
+            match = re.search(r'\[.*\]|\{.*\}', response.text, re.DOTALL)
+            if not match:
+                raise ValueError("No JSON array or object found in response")
+                
+            json_data = json.loads(match.group())
+            return json_data
+            
+        except Exception as e:
+            print(f"AI Generation Error on attempt {attempt + 1}: {e}")
+            if attempt < retries:
+                print("Retrying in 2 seconds...")
+                time.sleep(2)
+            else:
+                print("All AI retries failed.")
+                return None
+
+# --- 5. API ROUTES ---
 
 # ADDED: Root route to serve the frontend HTML file
 @app.route('/')
@@ -207,42 +236,32 @@ def generate_careers():
       {{"title": "UX Designer", "description": "Design user-friendly interfaces."}}
     ]
     """
-    try:
-        response = model.generate_content(prompt)
-        print("RAW RESPONSE:", response.text) # Debugging raw response
-        
-        try:
-            # We first try to clean it using existing helper, then parse
-            cleaned_text = clean_json_response(response.text)
-            json_data = json.loads(cleaned_text)
-            
-            # Validate output structure
-            if not isinstance(json_data, list):
-                raise ValueError("Response is not a JSON array")
-                
-            for item in json_data:
-                if "title" not in item or "description" not in item:
-                    raise ValueError("JSON object missing 'title' or 'description'")
-                    
-            return jsonify(json_data)
-        except Exception as parse_error:
-            print("Parsing Error:", parse_error)
-            print("Failed to parse response, returning fallback dummy data...")
-            # Fallback dummy data
-            return jsonify([
-                {"title": "Software Engineer", "description": "Build robust, scalable software applications and systems."},
-                {"title": "Data Scientist", "description": "Analyze complex data to help companies make informed business decisions."},
-                {"title": "Product Manager", "description": "Guide the strategy and development of new products from conception to launch."}
-            ])
+    json_data = generate_ai_response(prompt, expect_json=True)
+    
+    fallback_data = [
+        {"title": "Software Engineer", "description": "Build robust, scalable software applications and systems."},
+        {"title": "Data Scientist", "description": "Analyze complex data to help companies make informed business decisions."},
+        {"title": "Product Manager", "description": "Guide the strategy and development of new products from conception to launch."}
+    ]
 
-    except Exception as e:
-        print(f"Gemini Error in /generate-careers: {e}")
-        print("Failed to call Gemini API, returning fallback dummy data...")
-        return jsonify([
-            {"title": "Software Engineer", "description": "Build robust, scalable software applications and systems."},
-            {"title": "Data Scientist", "description": "Analyze complex data to help companies make informed business decisions."},
-            {"title": "Product Manager", "description": "Guide the strategy and development of new products from conception to launch."}
-        ])
+    if not json_data:
+        print("generate_ai_response failed, using fallback data.")
+        return jsonify(fallback_data)
+
+    try:
+        # Validate output structure
+        if not isinstance(json_data, list):
+            raise ValueError("Response is not a JSON array")
+            
+        for item in json_data:
+            if "title" not in item or "description" not in item:
+                raise ValueError("JSON object missing 'title' or 'description'")
+                
+        return jsonify(json_data)
+    except Exception as validation_error:
+        print(f"Validation Error: {validation_error}")
+        print("Returning fallback dummy data...")
+        return jsonify(fallback_data)
 
 @app.route('/generate-future-scope', methods=['POST'])
 def generate_future_scope():
@@ -340,22 +359,10 @@ def generate_roadmap():
       }}
     ]
     """
-    try:
-        response = model.generate_content(prompt)
-        print("RAW RESPONSE:", response.text)
-        
-        # Safe regex parsing
-        import re
-        match = re.search(r'\[.*\]', response.text, re.DOTALL)
-        if not match:
-            raise ValueError("Invalid AI response: No JSON array found")
-            
-        json_data = json.loads(match.group())
-        return jsonify(json_data)
-        
-    except Exception as e:
-        print(f"Gemini Error in /generate-roadmap: {e}")
-        print("Returning fallback roadmap data...")
+    json_data = generate_ai_response(prompt, expect_json=True)
+    
+    if not json_data:
+        print("generate_ai_response failed for roadmap, using fallback data.")
         return jsonify([
           {
             "title": "Basics",
@@ -370,6 +377,8 @@ def generate_roadmap():
             ]
           }
         ])
+
+    return jsonify(json_data)
         
 @app.route('/analyze-skills', methods=['POST'])
 def analyze_skills():
