@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- BACKEND CONNECTION ---
             // Replace with your actual URL
-            const BASE_URL = 'http://127.0.0.1:5001';
+            const BASE_URL = 'https://margen-1-f633.onrender.com';
             async function handleApiRequest(endpoint, method = 'POST', body = null) {
                 const url = `${BASE_URL}${endpoint}`;
                 const options = {
