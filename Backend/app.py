@@ -38,7 +38,7 @@ if not gemini_api_key:
     print("CRITICAL ERROR: GEMINI_API_KEY not found in environment variables. The application cannot start without it.", file=sys.stderr)
     sys.exit(1)
 
-genai.configure(api_key=AIzaSyAppG1_IpujbGijl0SEepuKkqWniFEx1lA)
+genai.configure(api_key=gemini_api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 # --- 2. DATABASE MODELS ---
